@@ -6,6 +6,8 @@ import com.example.ccidbackend.entity.Application;
 import com.example.ccidbackend.entity.Document;
 import com.example.ccidbackend.entity.LegalizationStamp;
 import com.example.ccidbackend.repository.ApplicationRepository;
+import com.example.ccidbackend.repository.LegalizationStampRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,23 +22,27 @@ public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
     private final LegalizationStampService legalizationStampService;
+    private final LegalizationStampRepository legalizationStampRepository;
 
     // ================================
     // CREATE (Save full 1-1-1)
     // ================================
-    public ApplicationDTO createApplication(Application application) {
+    public ApplicationDTO createApplication(Application application, Long stampId) {
 
         if (application.getStatus() == null) {
             application.setStatus("PENDING");
         }
 
-        LegalizationStamp stamp = application.getLegalizationStamp();
+        // LegalizationStamp stamp = application.getLegalizationStamp();
+        LegalizationStamp stamp = legalizationStampRepository.findById(stampId)
+                .orElseThrow(() -> new RuntimeException("Stamp not found with id: " + stampId));
 
         if (stamp != null) {
 
             // set chiều ngược lại
             stamp.setApplication(application);
-
+            // sửa chỗ này để set cho application
+            application.setLegalizationStamp(stamp);
             Document document = stamp.getDocument();
             if (document != null) {
                 document.setLegalizationStamp(stamp);

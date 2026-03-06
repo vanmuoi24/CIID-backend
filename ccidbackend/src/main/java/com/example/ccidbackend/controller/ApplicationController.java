@@ -22,7 +22,7 @@ public class ApplicationController {
     public ResponseEntity<ApiResponse<ApplicationDTO>> createApplication(
             @RequestBody ApplicationDTO applicationDTO) {
 
-                System.out.println(applicationDTO);
+                System.out.println("application DTO" + applicationDTO);
         try {
             Application application = new Application();
         
@@ -34,7 +34,7 @@ public class ApplicationController {
             application.setSignatoryTitle(applicationDTO.getSignatoryTitle());
             application.setStatus(applicationDTO.getStatus());
             
-            ApplicationDTO appDTO = applicationService.createApplication(application);
+            ApplicationDTO appDTO = applicationService.createApplication(application, applicationDTO.getLegalizationStamp().getId());
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(ApiResponse.success(appDTO, "Application created successfully"));
         } catch (Exception e) {

@@ -63,7 +63,7 @@ public class DocumentService {
     public DocumentDTO updateDocument(Long id, Document request) {
 
         Document doc = documentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Document not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Document not found with    : " + id));
 
         if (request.getCvType() != null)
             doc.setCvType(request.getCvType());
@@ -110,6 +110,7 @@ public class DocumentService {
     public DocumentDTO convertToDTO(Document doc) {
         return DocumentDTO.builder()
                 .id(doc.getId())
+                .applicationId(doc.getLegalizationStamp().getId()) // Lấy ID của stamp để gán vào applicationId trong DTO
                 .cvType(doc.getCvType())
                 .documentTitle(doc.getDocumentTitle())
                 .documentType(doc.getDocumentType())
