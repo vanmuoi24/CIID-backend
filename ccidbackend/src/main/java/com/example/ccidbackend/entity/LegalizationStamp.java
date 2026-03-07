@@ -19,7 +19,6 @@ public class LegalizationStamp {
     private Long id;
 
     // Có thể null nếu chưa gán document
-  
 
     private String country;
 
@@ -50,9 +49,15 @@ public class LegalizationStamp {
     @Column(name = "signature_image")
     private String signatureImage;
 
-@OneToOne(mappedBy = "legalizationStamp", fetch = FetchType.LAZY)
-private Application application;
+    @OneToOne(mappedBy = "legalizationStamp", fetch = FetchType.LAZY)
+    private Application application;
 
-   @OneToOne(mappedBy = "legalizationStamp", fetch = FetchType.LAZY)
-private Document document;
+    @OneToOne(mappedBy = "legalizationStamp", fetch = FetchType.LAZY)
+    private Document document;
+
+    @Column(name = "verification_code", unique = true)
+    private String verificationCode;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 }

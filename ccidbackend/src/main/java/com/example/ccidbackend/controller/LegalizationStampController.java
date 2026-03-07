@@ -89,4 +89,9 @@ public class LegalizationStampController {
                     .body(ApiResponse.error("Legalization stamp not found", e.getMessage()));
         }
     }
+
+    @GetMapping("/verify/{code}")
+public ResponseEntity<ApiResponse<LegalizationStampDTO>> verify(@PathVariable String code){
+       return ResponseEntity.ok(ApiResponse.success(legalizationStampService.getByCode(code)));
+}
 }

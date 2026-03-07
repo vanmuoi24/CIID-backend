@@ -16,4 +16,7 @@ public interface LegalizationStampRepository extends JpaRepository<LegalizationS
 
     // Nếu muốn tìm stamp theo application id
     Optional<LegalizationStamp> findByApplication_Id(Long applicationId);
+
+
+    Optional<LegalizationStamp> findByVerificationCode(String verificationCode);
 }

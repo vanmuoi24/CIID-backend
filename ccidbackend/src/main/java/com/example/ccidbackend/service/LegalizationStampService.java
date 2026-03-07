@@ -1,5 +1,7 @@
 package com.example.ccidbackend.service;
 
+import com.example.ccidbackend.dto.ApplicationDTO;
+import com.example.ccidbackend.dto.DocumentDTO;
 import com.example.ccidbackend.dto.LegalizationStampDTO;
 import com.example.ccidbackend.entity.LegalizationStamp;
 import com.example.ccidbackend.repository.DocumentRepository;
@@ -89,20 +91,60 @@ public class LegalizationStampService {
         legalizationStampRepository.delete(stamp);
     }
 
-    public LegalizationStampDTO convertToDTO(LegalizationStamp stamp) {
-        return LegalizationStampDTO.builder()
-                .id(stamp.getId())
-             
-                .country(stamp.getCountry())
-                .signedBy(stamp.getSignedBy())
-                .signedTitle(stamp.getSignedTitle())
-                .notaryOffice(stamp.getNotaryOffice())
-                .certifiedPlace(stamp.getCertifiedPlace())
-                .certifiedDate(stamp.getCertifiedDate())
-                .consularDepartment(stamp.getConsularDepartment())
-                .stampNumber(stamp.getStampNumber())
-                .qrCode(stamp.getQrCode())
-                .signatureImage(stamp.getSignatureImage())
+private LegalizationStampDTO convertToDTO(LegalizationStamp stamp) {
+
+    DocumentDTO documentDTO = null;
+    ApplicationDTO applicationDTO = null;
+
+    // map document
+    if (stamp.getDocument() != null) {
+        documentDTO = DocumentDTO.builder()
+                 .id(stamp.getDocument().getId())
+            .cvType(stamp.getDocument().getCvType())
+            .documentTitle(stamp.getDocument().getDocumentTitle())
+            .documentType(stamp.getDocument().getDocumentType())
+            .holderName(stamp.getDocument().getHolderName())
+            .referenceNumber(stamp.getDocument().getReferenceNumber())
+            .issueDate(stamp.getDocument().getIssueDate())
+            .certifyingAuthority(stamp.getDocument().getCertifyingAuthority())
+            .certifyingSignatory(stamp.getDocument().getCertifyingSignatory())
+            .certifyingTitle(stamp.getDocument().getCertifyingTitle())
+            .build();
+    }
+
+    // map application
+    if (stamp.getApplication() != null) {
+        applicationDTO = ApplicationDTO.builder()
+                .id(stamp.getApplication().getId())
+                .id(stamp.getApplication().getId())
+                .receiptDate(stamp.getApplication().getReceiptDate())
+                .resultDate(stamp.getApplication().getResultDate())
+                .competentAuth(stamp.getApplication().getCompetentAuth())
+                .submissionMethod(stamp.getApplication().getSubmissionMethod())
                 .build();
     }
+
+    return LegalizationStampDTO.builder()
+            .id(stamp.getId())
+            .country(stamp.getCountry())
+            .signedBy(stamp.getSignedBy())
+            .signedTitle(stamp.getSignedTitle())
+            .notaryOffice(stamp.getNotaryOffice())
+            .certifiedPlace(stamp.getCertifiedPlace())
+            .certifiedDate(stamp.getCertifiedDate())
+            .consularDepartment(stamp.getConsularDepartment())
+            .stampNumber(stamp.getStampNumber())
+            .qrCode(stamp.getQrCode())
+            .signatureImage(stamp.getSignatureImage())
+            .document(documentDTO)
+            .application(applicationDTO)
+            .build();
+}
+
+
+
+public LegalizationStampDTO getByCode(String code){
+    return convertToDTO(legalizationStampRepository.findByVerificationCode(code)
+            .orElseThrow(() -> new RuntimeException("Not found")));
+}
 }

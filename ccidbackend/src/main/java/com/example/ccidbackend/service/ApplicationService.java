@@ -137,10 +137,7 @@ public class ApplicationService {
 
         LegalizationStampDTO stampDTO = null;
 
-        if (app.getLegalizationStamp() != null) {
-            stampDTO = legalizationStampService
-                    .convertToDTO(app.getLegalizationStamp());
-        }
+
 
         return ApplicationDTO.builder()
                 .id(app.getId())
