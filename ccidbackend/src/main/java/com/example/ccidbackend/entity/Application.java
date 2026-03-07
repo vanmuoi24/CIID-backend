@@ -66,8 +66,7 @@ public class Application {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
-@JoinColumn(name = "legalization_stamp_id")
-private LegalizationStamp legalizationStamp;
+    @JoinColumn(name = "legalization_stamp_id")
+    private LegalizationStamp legalizationStamp;
 
-  
 }

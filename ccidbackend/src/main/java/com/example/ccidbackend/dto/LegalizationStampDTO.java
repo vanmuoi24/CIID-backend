@@ -24,7 +24,7 @@ public class LegalizationStampDTO {
     private String stampNumber;
     private String qrCode;
     private String signatureImage;
-
+    private String image_url;
     private ApplicationDTO application; // Thêm trường này nếu muốn trả về thông tin application liên quan
     private DocumentDTO document; // Thêm trường này nếu muốn trả về thông tin document liên quan
 }
