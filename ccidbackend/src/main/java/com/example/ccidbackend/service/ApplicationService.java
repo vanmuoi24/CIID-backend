@@ -41,7 +41,7 @@ public class ApplicationService {
 
             // set chiều ngược lại
             stamp.setApplication(application);
-            // sửa chỗ này để set cho application
+            // set stamp vào application
             application.setLegalizationStamp(stamp);
             Document document = stamp.getDocument();
             if (document != null) {
