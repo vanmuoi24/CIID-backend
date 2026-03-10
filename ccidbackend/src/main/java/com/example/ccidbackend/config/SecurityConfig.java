@@ -56,7 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                                                 .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/legalization-stamps/**").permitAll()
-                        .requestMatchers("/api/signatures/**").permitAll() // Cho phép truy cập vào tất cả các endpoint (tạm thời, cần điều chỉnh sau)
+                        .requestMatchers("/api/v1/stamps/**").permitAll() // Cho phép truy cập vào tất cả các endpoint (tạm thời, cần điều chỉnh sau)
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
