@@ -8,7 +8,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,8 +32,12 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(
+            @Valid @RequestBody LoginRequest loginRequest,
+            HttpServletResponse response
+    ) {
         try {
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUsername(),
@@ -39,15 +46,19 @@ public class AuthController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
             String jwt = tokenProvider.generateToken(authentication);
 
-            // Tạo HttpOnly Cookie để lưu token an toàn
-            Cookie jwtCookie = new Cookie("jwt", jwt);
-            jwtCookie.setHttpOnly(true); // Không thể truy cập từ JavaScript
-            jwtCookie.setSecure(false); // Set true khi dùng HTTPS trong production
-            jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(36000); // 10 giờ (giống với token expiration)
-            response.addCookie(jwtCookie);
+            // Tạo cookie JWT
+            ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
+                    .httpOnly(true)
+                    .secure(true) // production
+                    .path("/")
+                    .sameSite("None") // QUAN TRỌNG
+                    .maxAge(36000)
+                    .build();
+
+            response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
             User user = userRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -60,24 +71,28 @@ public class AuthController {
                     .createdAt(user.getCreatedAt())
                     .build();
 
-            // Vẫn trả về token trong response để frontend có thể sử dụng nếu cần
             AuthResponse authResponse = new AuthResponse(jwt, userDTO);
 
-            return ResponseEntity.ok(ApiResponse.builder()
-                    .success(true)
-                    .message("Login successful")
-                    .data(authResponse)
-                    .build());
+            return ResponseEntity.ok(
+                    ApiResponse.builder()
+                            .success(true)
+                            .message("Login successful")
+                            .data(authResponse)
+                            .build()
+            );
 
         } catch (Exception e) {
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.builder()
-                            .success(false)
-                            .message("Invalid username or password")
-                            .data(null)
-                            .build());
+                    .body(
+                            ApiResponse.builder()
+                                    .success(false)
+                                    .message("Invalid username or password")
+                                    .build()
+                    );
         }
-    }
+
+}
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
