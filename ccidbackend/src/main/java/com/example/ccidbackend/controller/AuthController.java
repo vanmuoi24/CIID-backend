@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://ciid-backend.onrender.com", "https://ciid-backend.onrender.com"})
+@CrossOrigin(origins = {"https://ccidtest.onrender.com", "https://ciid-backend.onrender.com"})
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
