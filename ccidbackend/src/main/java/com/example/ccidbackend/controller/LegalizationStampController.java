@@ -115,7 +115,7 @@ public class LegalizationStampController {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy stamp"));
 
         // Link khi scan QR
-        String qrContent = "http://localhost:5173/verify/" + stamp.getVerificationCode();
+        String qrContent = "https://ciid-backend.onrender.com/verify/" + stamp.getVerificationCode();
 
         byte[] qrImage = qrCodeService.generateQRCode(qrContent, 2000, 2000);
 
