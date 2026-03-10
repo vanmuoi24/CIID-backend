@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "applications")
 @Data
@@ -23,6 +25,7 @@ public class Application {
     private String submissionMethod;
 
     // Ngày nhận hồ sơ
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "receipt_date", nullable = true)
     private LocalDate receiptDate;
 
@@ -31,6 +34,8 @@ public class Application {
     private String competentAuth;
 
     // Ngày trả kết quả
+        @JsonFormat(pattern = "dd/MM/yyyy")
+
     @Column(name = "result_date", nullable = true)
     private LocalDate resultDate;
 

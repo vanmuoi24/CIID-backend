@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+
 import java.time.LocalDate;
-
-
 
 @Data
 @NoArgsConstructor
@@ -25,6 +25,9 @@ public class LegalizationStampDTO {
     private String qrCode;
     private String signatureImage;
     private String image_url;
+    private String verificationCode;
     private ApplicationDTO application; // Thêm trường này nếu muốn trả về thông tin application liên quan
-    private DocumentDTO document; // Thêm trường này nếu muốn trả về thông tin document liên quan
+    private DocumentDTO document;
+    private SignatureDTO signature;
+    // Thêm trường này nếu muốn trả về thông tin document liên quan
 }

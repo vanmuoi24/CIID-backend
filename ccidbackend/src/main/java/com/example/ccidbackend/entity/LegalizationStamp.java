@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "legalization_stamps")
 @Data
@@ -34,6 +36,7 @@ public class LegalizationStamp {
     @Column(name = "certified_place")
     private String certifiedPlace;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(name = "certified_date")
     private LocalDate certifiedDate;
 
@@ -60,4 +63,7 @@ public class LegalizationStamp {
 
     @Column(name = "image_url")
     private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "signature_id")
+    private Signature signature;
 }

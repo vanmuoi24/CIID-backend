@@ -5,9 +5,14 @@ import com.example.ccidbackend.dto.LegalizationStampDTO;
 import com.example.ccidbackend.entity.LegalizationStamp;
 import com.example.ccidbackend.service.LegalizationStampService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -17,6 +22,8 @@ import java.util.List;
 public class LegalizationStampController {
 
     private final LegalizationStampService legalizationStampService;
+    private final com.example.ccidbackend.repository.LegalizationStampRepository legalizationStampRepository;
+    private final com.example.ccidbackend.service.QRCodeService qrCodeService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<LegalizationStampDTO>> createLegalizationStamp(
@@ -42,10 +49,9 @@ public class LegalizationStampController {
         }
     }
 
-  
-
     @GetMapping("/stamp-number/{stampNumber}")
-    public ResponseEntity<ApiResponse<LegalizationStampDTO>> getLegalizationStampByStampNumber(@PathVariable String stampNumber) {
+    public ResponseEntity<ApiResponse<LegalizationStampDTO>> getLegalizationStampByStampNumber(
+            @PathVariable String stampNumber) {
         try {
             LegalizationStampDTO stampDTO = legalizationStampService.getLegalizationStampByStampNumber(stampNumber);
             return ResponseEntity.ok(ApiResponse.success(stampDTO));
@@ -91,7 +97,32 @@ public class LegalizationStampController {
     }
 
     @GetMapping("/verify/{code}")
-public ResponseEntity<ApiResponse<LegalizationStampDTO>> verify(@PathVariable String code){
-       return ResponseEntity.ok(ApiResponse.success(legalizationStampService.getByCode(code)));
-}
+    public ResponseEntity<ApiResponse<LegalizationStampDTO>> verify(@PathVariable String code) {
+        return ResponseEntity.ok(ApiResponse.success(legalizationStampService.getByCode(code)));
+    }
+
+    @PutMapping("/{id}/image")
+    public LegalizationStampDTO uploadImage(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+        return legalizationStampService.updateImage(id, file);
+    }
+
+    @GetMapping("/{id}/qr")
+    public ResponseEntity<byte[]> getQRCode(@PathVariable Long id) throws Exception {
+
+        LegalizationStamp stamp = legalizationStampRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy stamp"));
+
+        // Link khi scan QR
+        String qrContent = "http://localhost:5173/verify/" + stamp.getVerificationCode();
+
+        byte[] qrImage = qrCodeService.generateQRCode(qrContent, 2000, 2000);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"stamp-" + stamp.getId() + ".png\"")
+                .contentType(MediaType.IMAGE_PNG)
+                .body(qrImage);
+    }
 }

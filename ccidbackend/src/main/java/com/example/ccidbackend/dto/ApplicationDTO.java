@@ -25,4 +25,5 @@ public class ApplicationDTO {
     private java.time.LocalDateTime updatedAt;
     private Long userId;
     private LegalizationStampDTO legalizationStamp;
+    private String image_url;
 }

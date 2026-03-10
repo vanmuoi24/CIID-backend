@@ -31,7 +31,7 @@ public class DocumentController {
             document.setIssueDate(documentDTO.getIssueDate());
             document.setCertifyingAuthority(documentDTO.getCertifyingAuthority());
             document.setCertifyingSignatory(documentDTO.getCertifyingSignatory());
-            document.setCertifyingTitle(documentDTO.getCertifyingTitle());
+         
             
             DocumentDTO docDTO = documentService.createDocument(document, documentDTO.getApplicationId());
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -80,7 +80,7 @@ public class DocumentController {
             document.setIssueDate(documentDTO.getIssueDate());
             document.setCertifyingAuthority(documentDTO.getCertifyingAuthority());
             document.setCertifyingSignatory(documentDTO.getCertifyingSignatory());
-            document.setCertifyingTitle(documentDTO.getCertifyingTitle());
+   
             
             DocumentDTO docDTO = documentService.updateDocument(id, document);
             return ResponseEntity.ok(ApiResponse.success(docDTO, "Document updated successfully"));

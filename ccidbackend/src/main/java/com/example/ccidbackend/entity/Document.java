@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "documents")
 @Data
@@ -17,8 +19,6 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-  
 
     // ===== 1. Loại CV =====
     @Column(name = "cv_type", nullable = false)
@@ -37,23 +37,22 @@ public class Document {
     @Column(name = "reference_number", nullable = false)
     private String referenceNumber; // 15364
 
+    
     @Column(name = "issue_date", nullable = false)
-    private LocalDate issueDate; // 05/02/2026
+    private LocalDate issueDate;
 
     // ===== 3. Thông tin cơ quan sao/chứng thực =====
     @Column(name = "certifying_authority", nullable = false)
-    private String certifyingAuthority; 
+    private String certifyingAuthority;
     // VPCC Nguyễn Huệ, P. Ô Chợ Dừa, TP. Hà Nội
 
     @Column(name = "certifying_signatory", nullable = false)
-    private String certifyingSignatory; 
+    private String certifyingSignatory;
     // Lê Như Tuân
 
-    @Column(name = "certifying_title", nullable = false)
-    private String certifyingTitle; 
-    // Công chứng viên
+
 
     @OneToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "legalization_stamp_id", unique = true)
-private LegalizationStamp legalizationStamp;
+    @JoinColumn(name = "legalization_stamp_id", unique = true)
+    private LegalizationStamp legalizationStamp;
 }

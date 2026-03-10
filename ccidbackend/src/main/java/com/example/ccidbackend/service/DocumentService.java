@@ -89,8 +89,7 @@ public class DocumentService {
         if (request.getCertifyingSignatory() != null)
             doc.setCertifyingSignatory(request.getCertifyingSignatory());
 
-        if (request.getCertifyingTitle() != null)
-            doc.setCertifyingTitle(request.getCertifyingTitle());
+      
 
         return convertToDTO(doc);
     }
@@ -119,7 +118,7 @@ public class DocumentService {
                 .issueDate(doc.getIssueDate())
                 .certifyingAuthority(doc.getCertifyingAuthority())
                 .certifyingSignatory(doc.getCertifyingSignatory())
-                .certifyingTitle(doc.getCertifyingTitle())
+           
                 .build();
     }
 }

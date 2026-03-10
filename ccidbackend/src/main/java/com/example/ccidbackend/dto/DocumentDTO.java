@@ -25,5 +25,5 @@ public class DocumentDTO {
 
     private String certifyingAuthority;
     private String certifyingSignatory;
-    private String certifyingTitle;
+
 }
