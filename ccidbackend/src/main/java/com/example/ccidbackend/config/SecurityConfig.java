@@ -55,7 +55,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
                                                 .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1//api/v1/legalization-stamps/**").permitAll()
+                        .requestMatchers("/api/v1/legalization-stamps/**").permitAll()
                         .requestMatchers("/api/signatures/**").permitAll() // Cho phép truy cập vào tất cả các endpoint (tạm thời, cần điều chỉnh sau)
                         .anyRequest().authenticated()
                 )
